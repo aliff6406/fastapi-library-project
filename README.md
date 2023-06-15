@@ -1,0 +1,1 @@
+App Launched with `poetry run start` command in terminal
