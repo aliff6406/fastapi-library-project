@@ -11,6 +11,7 @@ python = "^3.10"
 fastapi = "^0.97.0"
 uvicorn = "^0.22.0"
 pydantic = "^1.10.9"
+sqlalchemy = "^2.0.16"
 
 [build-system]
 requires = ["poetry-core"]

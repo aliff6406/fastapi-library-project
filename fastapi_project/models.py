@@ -13,6 +13,7 @@ class Book(BaseModel):
     author: str = Field(min_length=1)
     rating: int = Field(gt=-1, lt=101)
     published_date: date
+    available: bool = True
 
     @validator("published_date")
     def verify_published_date(cls, v):
