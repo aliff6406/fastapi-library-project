@@ -1,29 +1,27 @@
-from datetime import date
-from enum import Enum
-from uuid import UUID, uuid4
-from pydantic import BaseModel, Field, validator
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date
+from sqlalchemy.orm import relationship
+from .database import Base
 
-class Gender(str, Enum):
-    male = "male"
-    female = "female"
 
-class Book(BaseModel):
-    id: UUID = uuid4()
-    title: str = Field(min_length=1)
-    author: str = Field(min_length=1)
-    rating: int = Field(gt=-1, lt=101)
-    published_date: date
-    available: bool = True
+class Book(Base):
+    __tablename__ = "books"
 
-    @validator("published_date")
-    def verify_published_date(cls, v):
-        if v > date.today():
-            raise ValueError("date of publish cannot exceed today's date")
-        return v
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, unique=True, index=True)
+    author = Column(String)
+    rating = Column(Integer)
+    published_date = Column(Date)
+    is_available = Column(Boolean, default=True)
+    borrower_id = Column(Integer, ForeignKey("User.id"))
+    
+    borrower = relationship("User", back_populates="book")
 
-class User(BaseModel):
-    id: UUID = uuid4()
-    name: str = Field(min_length=1)
-    age: int = Field(gt=0)
-    gender: Gender
-    borrowed_book: Book | None = None
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    age = Column(Integer)
+    gender = Column(String)
+
+    book = relationship("Book", back_populates="borrower")
