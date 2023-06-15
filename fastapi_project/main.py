@@ -2,10 +2,10 @@ from datetime import date
 import uvicorn
 from uuid import uuid4
 from fastapi import FastAPI
-from .schema import Gender, User, Book
+from .schemas import Gender, User, Book
 from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
-from. import models
+from . import models
 
 app = FastAPI()
 
