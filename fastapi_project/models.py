@@ -26,10 +26,4 @@ class User(BaseModel):
     name: str = Field(min_length=1)
     age: int = Field(gt=0)
     gender: Gender
-    borrowed_books: list[Book] | None = []
-
-    @validator("borrowed_books")
-    def maximum_borrowed_books(cls, v):
-        if len(v) > 3:
-            raise ValueError("maximum allowed number of borrowed books is 3")
-        return v
+    borrowed_book: Book | None = None
