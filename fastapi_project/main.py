@@ -11,15 +11,16 @@ description = """
 
 You are able to:
 
-* **Create books**
-* **Read books**
+* **Create books**.
+* **Read books**.
 
 ## Users
 
 You are able to:
 
-* **Create users**
-* **Read users**
+* **Create users**.
+* **Read users**.
+* **Update users borrowed books** (_not implemented_).
 """
 
 tags_metadata = [
@@ -68,6 +69,18 @@ def read_users(db: Session = Depends(get_db)):
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db=db, user_id=user_id)
     return db_user
+
+@app.put("/users/{user_id}", response_model=schemas.User, tags=["users"])
+def user_borrow_book_by_id(user_id: int, book: schemas.UpdateBook | None = None, db: Session = Depends(get_db)):
+    pass
+
+@app.delete("/users/{user_id}", response_model=dict(), tags=["users"])
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    db_user = crud.get_user(db=db, user_id=user_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail=f"ID {user_id} : Does not exit")
+    deleted_user = crud.delete_user(db=db, user_id=user_id)
+    return deleted_user
 
 @app.post("/books/", response_model=schemas.Book, tags=["books"])
 def create_book(book: schemas.BookCreate, db: Session = Depends(get_db)):
