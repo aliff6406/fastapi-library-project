@@ -30,7 +30,12 @@ class Book(BookBase):
         orm_mode = True
 
 class UpdateBook(BaseModel):
-    is_available: bool 
+    title: str | None = None
+    author: str | None = None
+    rating: int | None = Field(default=None, gt=-1, lt=101)
+    published_date: date | None = None
+    is_available: bool | None = None
+    borrower_id: int | None = None
 
 
 class UserBase(BaseModel):
@@ -48,3 +53,10 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+class UpdateUser(BaseModel):
+    email: str | None = None
+    name: str | None = None
+    age: int | None = Field(default=None, gt=0)
+    gender: Gender | None = None
+    borrowed_books: list[Book] | None = None
