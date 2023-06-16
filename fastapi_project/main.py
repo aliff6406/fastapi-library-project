@@ -13,6 +13,7 @@ You are able to:
 
 * **Create books**.
 * **Read books**.
+* **Update books**.
 
 ## Users
 
@@ -71,14 +72,21 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 @app.put("/users/{user_id}", response_model=schemas.User, tags=["users"])
-def user_borrow_book_by_id(user_id: int, book: schemas.UpdateBook | None = None, db: Session = Depends(get_db)):
-    pass
+def user_borrow_book_by_id(user_id: int, book_id: int, db: Session = Depends(get_db)):
+    db_book = crud.get_book(db, book_id=book_id)
+    if db_book is None:
+        raise HTTPException(status_code=404, detail=f"Book ID {book_id} : Does not exist")
+    db_user = crud.get_user(db, user_id=user_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail=f"User ID {user_id} : Does not exist")
+    db_book_to_update = crud.update_book_availability(db=db, book_id=book_id, borrower_id=user_id)
+    return crud.update_user_borrowed_book(db=db, user_id=user_id, book_id=book_id)
 
 @app.delete("/users/{user_id}", response_model=dict(), tags=["users"])
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db=db, user_id=user_id)
     if db_user is None:
-        raise HTTPException(status_code=404, detail=f"ID {user_id} : Does not exit")
+        raise HTTPException(status_code=404, detail=f"User ID {user_id} : Does not exist")
     deleted_user = crud.delete_user(db=db, user_id=user_id)
     return deleted_user
 
@@ -98,6 +106,13 @@ def read_books(db: Session = Depends(get_db)):
 def read_book(book_id: int, db: Session = Depends(get_db)):
     db_book = crud.get_book(db=db, book_id=book_id)
     return db_book
+
+@app.put("/books/{book_id}", response_model=schemas.Book, tags=["books"])
+def update_book(book_id: int, book: schemas.UpdateBook, db: Session = Depends(get_db)):
+    db_book = crud.get_book(db, book_id=book_id)
+    if db_book is None:
+        raise HTTPException(status_code=404, detail=f"Book ID {book_id} : Does not exist")
+    return crud.update_book(db=db, book_id=book_id, book=book)
 
 def main():
     """Launched with `poetry run start`"""
