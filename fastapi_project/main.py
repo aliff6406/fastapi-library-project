@@ -1,6 +1,5 @@
 from datetime import date
 import uvicorn
-from uuid import uuid4
 from fastapi import FastAPI, Depends, HTTPException
 from . import crud, models, schemas
 from .database import engine, SessionLocal
