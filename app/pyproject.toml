@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "fastapi-project"
+name = "app"
 version = "0.1.0"
 description = ""
 authors = ["Aliff Amir <aliff6406@gmail.com@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "backend"}]
+packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
