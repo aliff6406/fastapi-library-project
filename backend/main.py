@@ -115,7 +115,7 @@ def update_book(book_id: int, book: schemas.UpdateBook, db: Session = Depends(ge
 
 def main():
     """Launched with `poetry run start`"""
-    uvicorn.run("fastapi_project.main:app", host="localhost", port=8000, reload=True)
+    uvicorn.run("backend.main:app", host="localhost", port=8000, reload=True)
 
 if __name__ == "__main__":
     main()
