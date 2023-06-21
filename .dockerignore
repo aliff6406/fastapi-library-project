@@ -1,0 +1,10 @@
+# Environments
+.venv
+
+# git
+.git
+.gitignore
+
+# Markdown files
+*.md
+!README.md
