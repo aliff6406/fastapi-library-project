@@ -1,10 +1,16 @@
 # Environments
 .venv
+venv
+env
+
+# Docker
+.dockerignore
+Dockerfile
 
 # git
 .git
 .gitignore
 
-# Markdown files
-*.md
-!README.md
+**/__pycache__
+*.pyc
+
