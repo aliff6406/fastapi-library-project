@@ -113,9 +113,6 @@ def update_book(book_id: int, book: schemas.UpdateBook, db: Session = Depends(ge
         raise HTTPException(status_code=404, detail=f"Book ID {book_id} : Does not exist")
     return crud.update_book(db=db, book_id=book_id, book=book)
 
-def main():
-    """Launched with `poetry run start`"""
-    uvicorn.run("app.main:app", host="localhost", port=8000, reload=True)
-
 if __name__ == "__main__":
-    main()
+
+    uvicorn.run("app.main:app", host="localhost", port=8001, reload=True)
