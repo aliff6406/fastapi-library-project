@@ -1,13 +1,10 @@
 # Environments
+**/.venv
 .venv
 venv
 env
 
-# Docker
-.dockerignore
-Dockerfile
-
-# git
+# # git
 .git
 .gitignore
 

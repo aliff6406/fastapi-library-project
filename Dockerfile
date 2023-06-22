@@ -2,15 +2,8 @@ FROM python:3.10.12
 
 WORKDIR /app/
 
-# https://docs.python.org/3/using/cmdline.html#envvar-PYTHONDONTWRITEBYTECODE
-# Prevents Python from writing .pyc files to disk
 ENV PYTHONDONTWRITEBYTECODE 1 \
-    # ensures that the python output is sent straight to terminal (e.g. your container log)
-    # without being first buffered and that you can see the output of your application (e.g. django logs)
-    # in real time. Equivalent to python -u: https://docs.python.org/3/using/cmdline.html#cmdoption-u
-    PYTHONUNBUFFERED 1 \
-    ENVIRONMENT prod \
-    TESTING 0
+    PYTHONUNBUFFERED 1
 
 # Install Poetry 
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3
@@ -20,16 +13,10 @@ RUN poetry config virtualenvs.create false
 # Copy poetry.lock* in case it doesn't exist in the repo
 COPY ./app/pyproject.toml ./app/poetry.lock* /app/
 
-# Allow installing dev dependencies to run tests
-ARG INSTALL_DEV=false
+RUN poetry install
 
-RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; else poetry install --no-root --no-dev ; fi"
-
-COPY ./app /app
-RUN chmod +x run.sh
-
+COPY ./app /app/
 ENV PYTHONPATH=/app
 
-# Run the run script, it will check for an /app/prestart.sh script (e.g. for migrations)
-# And then will start Uvicorn
-CMD ["./run.sh"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# "poetry" "shell"
