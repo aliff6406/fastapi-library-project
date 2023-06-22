@@ -1,9 +1,10 @@
-from datetime import date
-import uvicorn
 from fastapi import FastAPI, Depends, HTTPException
-from . import crud, models, schemas
-from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
+
+from . import crud, models, schemas
+from .database import SessionLocal, engine
+
+
 
 description = """
 ## Books
@@ -112,7 +113,3 @@ def update_book(book_id: int, book: schemas.UpdateBook, db: Session = Depends(ge
     if db_book is None:
         raise HTTPException(status_code=404, detail=f"Book ID {book_id} : Does not exist")
     return crud.update_book(db=db, book_id=book_id, book=book)
-
-if __name__ == "__main__":
-
-    uvicorn.run("app.main:app", host="localhost", port=8001, reload=True)
