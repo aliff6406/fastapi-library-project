@@ -16,7 +16,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: uvicorn app.main:app --port 0.0.0.0 --host 8000
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     depends_on:
       - postgres_db
     ports:
